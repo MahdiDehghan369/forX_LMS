@@ -14,7 +14,7 @@ const courseRoutes = {
       httpMethod: "post",
     },
     {
-      url: "/:courseCode",
+      url: "/:courseId",
       methodName: "getCourse",
       middlewares: [
         { name: "authMiddleware" },
@@ -23,7 +23,7 @@ const courseRoutes = {
       httpMethod: "get",
     },
     {
-      url: "/:courseCode",
+      url: "/:courseId",
       methodName: "updateCourse",
       middlewares: [
         { name: "authMiddleware" },
@@ -33,7 +33,7 @@ const courseRoutes = {
       httpMethod: "put",
     },
     {
-      url: "/:courseCode",
+      url: "/:courseId",
       methodName: "deleteCourse",
       middlewares: [
         { name: "authMiddleware" },
@@ -51,7 +51,7 @@ const courseRoutes = {
       httpMethod: "get",
     },
     {
-      url: "/:courseCode/status",
+      url: "/:courseId/status",
       methodName: "changeStatus",
       middlewares: [
         { name: "authMiddleware" },
@@ -61,7 +61,7 @@ const courseRoutes = {
       httpMethod: "patch",
     },
     {
-      url: "/:courseCode/sessions",
+      url: "/:courseId/sessions",
       methodName: "getSessions",
       middlewares: [
         { name: "authMiddleware" },

@@ -2,7 +2,13 @@ const ticketRepository = require("./ticket.repository");
 const ticketService = require("./ticket.bl");
 const ticketController = require("./ticket.controller");
 const ticketModel = require("./ticket.model");
-const { createTicketSchema, getTicketSchema,searchTicketSchema,updateTicketSchema ,changeTicketStatusSchema} = require("./ticket.schema")
+const {
+  createTicketSchema,
+  getTicketSchema,
+  searchTicketSchema,
+  updateTicketSchema,
+  changeTicketStatusSchema,
+} = require("./ticket.schema");
 
 module.exports = [
   {
@@ -21,7 +27,7 @@ module.exports = [
   {
     key: "ticketService",
     Class: ticketService,
-    dependencies: ["ticketRepo","departmentRepo"],
+    dependencies: ["ticketRepo", "departmentRepo"],
     type: "service",
     options: { singleton: true },
   },

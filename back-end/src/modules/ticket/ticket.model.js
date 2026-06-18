@@ -25,7 +25,7 @@ const schema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  user_id: {
+  User: {
     type: mongoose.Types.ObjectId,
     ref:"users",
     required: true,

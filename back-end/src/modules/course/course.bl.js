@@ -8,8 +8,8 @@ class CourseBl {
     this.sessionRepo = sessionRepo;
   }
 
-  #checkCourseExists = async (courseCode) => {
-    const course = await this.courseRepo.findByCourseCode(courseCode);
+  #checkCourseExists = async (courseId) => {
+    const course = await this.courseRepo.findCourseById(courseId);
     if (!course) {
       throw errorFactory.NotFound(
         operationMessages["course.notFound.error"].fa,
@@ -19,11 +19,18 @@ class CourseBl {
   };
 
   createCourse = async (adminId, data) => {
-    const instructor = await this.userRepo.findInstructorById(
+    const instructorExists = await this.userRepo.findInstructorById(
       data.instructorId,
     );
-    const exists = await this.courseRepo.findByCourseCode(data.courseCode);
-    if (exists) {
+    if (!instructorExists) {
+      throw errorFactory.Conflict(
+        operationMessages["instructor.notfound.error"].fa,
+      );
+    }
+    const courseExists = await this.courseRepo.findByCourseCode(
+      data.courseCode,
+    );
+    if (courseExists) {
       throw errorFactory.Conflict(
         operationMessages["course.duplicate.error"].fa,
       );
@@ -35,8 +42,8 @@ class CourseBl {
     return course;
   };
 
-  getCourse = async (courseCode) => {
-    const course = await this.#checkCourseExists(courseCode);
+  getCourse = async (courseId) => {
+    const course = await this.#checkCourseExists(courseId);
     return course;
   };
 
@@ -45,50 +52,41 @@ class CourseBl {
     return result;
   };
 
-  deleteCourse = async (courseCode) => {
-    await this.#checkCourseExists(courseCode);
-    await this.courseRepo.deleteCourse(courseCode);
+  deleteCourse = async (courseId) => {
+    await this.#checkCourseExists(courseId);
+    await this.courseRepo.deleteCourse(courseId);
   };
 
-  updateCourse = async (courseCode, data) => {
-    const currentCourse = await this.#checkCourseExists(courseCode);
-    if (
-      data.courseCode &&
-      data.courseCode.toString() !== courseCode.toString()
-    ) {
-      const conflictingCourse = await this.courseRepo.findOne({
-        courseCode: data.courseCode,
-        _id: { $ne: currentCourse._id },
-      });
-
-      if (conflictingCourse) {
-        throw errorFactory.Conflict(
-          operationMessages["course.duplicate.error"].fa,
-        );
-      }
+  updateCourse = async (courseId, data) => {
+    await this.#checkCourseExists(courseId);
+    const instructorExists = await this.userRepo.findInstructorById(
+      data.instructorId,
+    );
+    if (!instructorExists) {
+      throw errorFactory.Conflict(
+        operationMessages["instructor.notfound.error"].fa,
+      );
     }
-
-    await this.userRepo.findInstructorById(data.instructorId);
-    const updatedCourse = await this.courseRepo.updateByCourseCode(
-      courseCode,
+    const updatedCourse = await this.courseRepo.updateByCourseId(
+      courseId,
       data,
     );
     return updatedCourse;
   };
 
-  changeStatus = async (courseCode, status) => {
-    const course = await this.#checkCourseExists(courseCode);
+  changeStatus = async (courseId, status) => {
+    const course = await this.#checkCourseExists(courseId);
     if (course.status.toLowerCase() === status.toLowerCase()) return course;
-    const result = await this.courseRepo.updateByCourseCode(
-      courseCode,
+    const result = await this.courseRepo.updateByCourseId(
+      courseId,
       { status },
       {},
     );
     return result;
   };
 
-  getSessions = async (courseCode, query) => {
-    const course = await this.courseRepo.findByCourseCode(courseCode);
+  getSessions = async (courseId, query) => {
+    const course = await this.courseRepo.findCourseById(courseId);
 
     if (!course) {
       throw errorFactory.NotFound(

@@ -60,8 +60,8 @@ class CourseRepo extends MongoBaseRepository {
     return result;
   };
 
-  findByCourseCode = async (courseCode, options = {}) => {
-    const redisKey = `course:${courseCode}`;
+  findCourseById = async (courseId, options = {}) => {
+    const redisKey = `course:${courseId}`;
     let course = await redisRepository.get(redisKey);
     if (course) {
       return JSON.parse(course);
@@ -70,32 +70,32 @@ class CourseRepo extends MongoBaseRepository {
       ...options,
       populate: this.#populateCourse(),
     };
-    course = await this.findOne({ courseCode }, options);
+    course = await this.findOne({ courseId }, options);
     if (!course) return null;
     await redisRepository.set(redisKey, JSON.stringify(course));
     return course;
   };
 
-  deleteCourse = async (courseCode) => {
+  deleteCourse = async (courseId) => {
     await this.withTransaction(async (session) => {
-      await this.deleteOne({ courseCode }, { session });
+      await this.deleteOne({ courseId }, { session });
     });
-    await redisRepository.delete(`course:${courseCode}`);
+    await redisRepository.delete(`course:${courseId}`);
   };
 
-  updateByCourseCode = async (courseCode, data, options = {}) => {
+  updateByCourseId = async (courseId, data, options = {}) => {
     options = {
       ...options,
       populate: this.#populateCourse(),
     };
     const result = await this.withTransaction(async (session) => {
-      return await this.findOneAndUpdate({ courseCode }, data, {
+      return await this.findOneAndUpdate({ courseId }, data, {
         session,
         select: "-__v",
         ...options,
       });
     });
-    await redisRepository.delete(`course:${courseCode}`);
+    await redisRepository.delete(`course:${courseId}`);
     return result;
   };
 }

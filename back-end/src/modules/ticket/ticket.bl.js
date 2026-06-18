@@ -1,32 +1,38 @@
 const errorFactory = require("sillajError");
-const { operationMessages } = require("../../base/enums")
-class ticketService {
+const { operationMessages } = require("../../base/enums");
+
+class TicketBl {
   constructor(ticketRepo, departmentRepo) {
     this.ticketRepo = ticketRepo;
     this.departmentRepo = departmentRepo;
   }
 
-  async createTicket(req) {
-    const { department, title } = req.body;
-    const user_id = req.user._id;
-    const ticketExist = await this.ticketRepo.exists({ department, title, user_id });
+  async createTicket({ department, title }, userId) {
+    const ticketExist = await this.ticketRepo.exists({
+      department,
+      title,
+      userId,
+    });
 
     if (ticketExist) {
-      throw errorFactory.Conflict(operationMessages["ticket.create.conflict"].fa)
+      throw errorFactory.Conflict(
+        operationMessages["ticket.create.conflict"].fa,
+      );
     }
 
-    const departmentExist = await this.departmentRepo.exists({ _id: department })
+    const departmentExist = await this.departmentRepo.exists({
+      _id: department,
+    });
     if (!departmentExist) {
-      throw errorFactory.NotFound(operationMessages["department.notFound"].fa)
+      throw errorFactory.NotFound(operationMessages["department.notFound"].fa);
     }
-    return await this.ticketRepo.create({ ...req.body, user_id })
+    return await this.ticketRepo.create({ ...req.body, userId });
   }
 
   getTickets(req) {
     const { departmentId, tags, priority, status } = req.query;
 
     const query = {};
-
     if (departmentId) {
       query.departmentId = departmentId;
     }
@@ -39,7 +45,7 @@ class ticketService {
     if (status) {
       query.status = status;
     }
-    return this.ticketRepo.find(query)
+    return this.ticketRepo.find(query);
   }
 
   async getTicket(id) {
@@ -49,8 +55,8 @@ class ticketService {
     }
 
     const ticket = await this.ticketRepo.findById(id);
-     if (!ticket) {
-      throw errorFactory.NotFound(operationMessages["ticket.notFound"])
+    if (!ticket) {
+      throw errorFactory.NotFound(operationMessages["ticket.notFound"]);
     }
     await this.ticketRepo.setCache(id, ticket);
 
@@ -69,13 +75,17 @@ class ticketService {
     if (ticket.user_id.toString() !== user_id.toString()) {
       throw errorFactory.Forbidden(operationMessages["accessDenied"].fa);
     }
-    if (ticket.status === 'Closed') {
-      throw errorFactory.BadRequest("امکان ویرایش تیکت‌های بسته شده وجود ندارد.");
+    if (ticket.status === "Closed") {
+      throw errorFactory.BadRequest(
+        "امکان ویرایش تیکت‌های بسته شده وجود ندارد.",
+      );
     }
 
-    const conflict=await this.ticketRepo.findOne({ title, user_id });
-    if(conflict){
-      throw errorFactory.Conflict(operationMessages["ticket.create.conflict"].fa)
+    const conflict = await this.ticketRepo.findOne({ title, user_id });
+    if (conflict) {
+      throw errorFactory.Conflict(
+        operationMessages["ticket.create.conflict"].fa,
+      );
     }
 
     const updateData = {
@@ -85,7 +95,10 @@ class ticketService {
       ...(tags && { tags }),
     };
 
-    const updatedTicket = await this.ticketRepo.updateTicketById(id, updateData);
+    const updatedTicket = await this.ticketRepo.updateTicketById(
+      id,
+      updateData,
+    );
     await this.ticketRepo.deleteCache(id);
     return updatedTicket;
   }
@@ -93,7 +106,13 @@ class ticketService {
   async changeTicketStatus(req) {
     const { id } = req.params;
     const { status } = req.body;
-    const validStatuses = ["Open", "Pending", "In Progress", "Resolved", "Closed"];
+    const validStatuses = [
+      "Open",
+      "Pending",
+      "In Progress",
+      "Resolved",
+      "Closed",
+    ];
     if (!validStatuses.includes(status)) {
       throw errorFactory.BadRequest("وضعیت ارسالی نامعتبر است.");
     }
@@ -107,14 +126,13 @@ class ticketService {
   }
 
   async deleteTicket(id) {
-    const ticket=await this.ticketRepo.exists({_id:id});
-    if(!ticket){
-      throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa)
+    const ticket = await this.ticketRepo.exists({ _id: id });
+    if (!ticket) {
+      throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa);
     }
     await this.ticketRepo.deleteById(id);
     await this.ticketRepo.deleteCache(id);
   }
-
 }
 
-module.exports = ticketService;
+module.exports = TicketBl;

@@ -16,8 +16,8 @@ class CourseController {
   };
 
   getCourse = async (req, res, next) => {
-    const { courseCode } = req.params;
-    const result = await this.courseBl.getCourse(courseCode);
+    const { courseId } = req.params;
+    const result = await this.courseBl.getCourse(courseId);
     return res.sendResponse(200, {
       message: operationMessages["course.get.success"].fa,
       data: result,
@@ -34,17 +34,17 @@ class CourseController {
   };
 
   deleteCourse = async (req, res, next) => {
-    const { courseCode } = req.params;
-    await this.courseBl.deleteCourse(courseCode);
+    const { courseId } = req.params;
+    await this.courseBl.deleteCourse(courseId);
     return res.sendResponse(200, {
       message: operationMessages["course.delete.success"].fa,
     });
   };
 
   updateCourse = async (req, res, next) => {
-    const { courseCode } = req.params;
+    const { courseId } = req.params;
     const data = req.body;
-    const result = await this.courseBl.updateCourse(courseCode, data);
+    const result = await this.courseBl.updateCourse(courseId, data);
     return res.sendResponse(200, {
       message: operationMessages["course.update.success"].fa,
       data: result,
@@ -53,8 +53,8 @@ class CourseController {
 
   changeStatus = async (req, res, next) => {
     const { status } = req.body;
-    const { courseCode } = req.params;
-    const result = await this.courseBl.changeStatus(courseCode, status);
+    const { courseId } = req.params;
+    const result = await this.courseBl.changeStatus(courseId, status);
     return res.sendResponse(200, {
       message: operationMessages["course.update.success"].fa,
       data: result,
@@ -62,10 +62,10 @@ class CourseController {
   };
 
   getSessions = async (req, res, next) => {
-    const { courseCode } = req.params;
+    const { courseId } = req.params;
     const query = req.  query;
 
-    const result = await this.courseBl.getSessions(courseCode, query);
+    const result = await this.courseBl.getSessions(courseId, query);
 
     return res.sendResponse(200, {
       message: operationMessages["session.list.success"].fa,
