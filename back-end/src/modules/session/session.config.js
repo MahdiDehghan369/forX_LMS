@@ -21,7 +21,7 @@ module.exports = [
     key: "sessionBl",
     Class: SessionBl,
     type: "bl",
-    dependencies: ["sessionRepo", "courseRepo"],
+    dependencies: ["sessionRepo", "courseRepo", "sessionNoteRepo"],
   },
   {
     key: "sessionController",

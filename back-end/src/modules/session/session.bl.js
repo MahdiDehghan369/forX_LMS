@@ -2,9 +2,10 @@ const errorFactory = require('sillajError');
 const { operationMessages } = require("../../base/enums");
 
 class SessionBl {
-  constructor(sessionRepo, courseRepo) {
+  constructor(sessionRepo, courseRepo, noteRepo) {
     this.sessionRepo = sessionRepo;
     this.courseRepo = courseRepo;
+    this.noteRepo = noteRepo;
   }
 
   /** Helper to compute duration */
@@ -13,8 +14,8 @@ class SessionBl {
   }
 
   /** Create a new session */
-  createSession = async (courseCode, adminId, data) => {
-    const course = await this.courseRepo.findByCourseCode(courseCode);
+  createSession = async (courseId, adminId, data) => {
+    const course = await this.courseRepo.findCourseById(courseId);
     if (!course) {
       throw errorFactory.NotFound(
         operationMessages["course.notFound.error"].fa,
@@ -187,6 +188,16 @@ class SessionBl {
     );
     return updated;
   };
+
+  async getNotesBySession(sessionId, pagination = {}) {
+    const session = await this.sessionRepo.findBySessionId(sessionId);
+    if (!session) {
+      throw errorFactory.NotFound(
+        operationMessages["session.notFound.error"].fa,
+      );
+    }
+    return this.noteRepo.findBySessionId(sessionId, pagination);
+  }
 }
 
 module.exports = SessionBl;

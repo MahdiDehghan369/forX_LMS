@@ -1,8 +1,3 @@
-/**
- * Route definition for session material endpoints.
- * Follows the exact layout used by other modules (e.g., session.route.js).
- */
-
 const sessionMaterialRoutes = {
   configs: {
     // The `:sessionId` param is part of the prefix, matching the session routes.

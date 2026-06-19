@@ -29,22 +29,7 @@ class SessionNoteController {
       message: operationMessages["note.get.success"].fa,
       data: note,
     });
-  };
-
-  // GET /api/v1/sessionNote/session/:sessionId
-  getNotesBySession = async (req, res, next) => {
-    const { sessionId } = req.params;
-    const pagination = {
-      page: Number(req.query.page) || 1,
-      limit: Number(req.query.limit) || 20,
-      sort: req.query.sort || 'desc',
-    };
-    const result = await this.noteBl.getNotesBySession(sessionId, pagination);
-    return res.sendResponse(200, {
-      message: operationMessages["note.list.success"].fa,
-      data: result,
-    });
-  };
+  };  
 
   // PUT /api/v1/sessionNote/:id
   updateNote = async (req, res, next) => {

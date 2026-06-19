@@ -39,12 +39,6 @@ class SessionNoteBl {
     return note;
   }
 
-  /** Get paginated notes for a specific session */
-  async getNotesBySession(sessionId, pagination = {}) {
-    await this.#ensureSessionExists(sessionId);
-    return this.noteRepo.findBySessionId(sessionId, pagination);
-  }
-
   /** Update a note */
   async updateNote(noteId, data) {
     const note = await this.noteRepo.findById(noteId);

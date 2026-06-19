@@ -25,19 +25,7 @@ const sessionNoteRoutes = {
       ],
       httpMethod: "get",
     },
-
-    // ---- LIST NOTES FOR A SESSION ----
-    {
-      url: "/session/:sessionId",
-      methodName: "getNotesBySession",
-      middlewares: [
-        { name: "authMiddleware" },
-        // Re‑use the same ObjectId schema for sessionId
-        { name: "validate", args: ["noteIdParamSchema", "params"] },
-      ],
-      httpMethod: "get",
-    },
-
+    
     // ---- UPDATE ----
     {
       url: "/:id",

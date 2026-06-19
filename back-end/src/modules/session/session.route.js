@@ -5,7 +5,7 @@ const sessionsRoutes = {
   },
   routes: [
     {
-      url: "/:courseCode",
+      url: "/:courseId",
       methodName: "createSession",
       middlewares: [
         { name: "authMiddleware" },
@@ -50,6 +50,15 @@ const sessionsRoutes = {
         { name: "validate", args: ["changeSessionStatusSchema", "body"] },
       ],
       httpMethod: "patch",
+    },
+    {
+      url: "/:sessionId",
+      methodName: "getNotesBySession",
+      middlewares: [
+        { name: "authMiddleware" },
+        { name: "validate", args: ["noteIdParamSchema", "params"] },
+      ],
+      httpMethod: "get",
     },
   ],
 };
