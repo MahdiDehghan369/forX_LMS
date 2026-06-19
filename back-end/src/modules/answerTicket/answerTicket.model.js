@@ -1,32 +1,35 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema, model, Types } = mongoose;
 
-const answerTicketSchema = new mongoose.Schema(
+const answerTicketSchema = new Schema(
   {
+    ticketId: {
+      type: Types.ObjectId,
+      ref: 'Ticket',
+      required: true,
+      index: true,
+    },
+    userId: {
+      type: Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
     content: {
       type: String,
       required: true,
       trim: true,
     },
-    creator: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-      ref: "users",
+    attachments: {
+      type: [String],
+      default: [],
     },
-    ticket: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-      ref: "tickets",
+    isSolution: {
+      type: Boolean,
+      default: false,
     },
-    parentAnswer : {
-      type: mongoose.Types.ObjectId,
-      ref: "answerTickets",
-    }
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
 
-const answerTicketModel = mongoose.model('answerTickets', answerTicketSchema);
-
-module.exports = answerTicketModel;
+module.exports = model('AnswerTicket', answerTicketSchema);

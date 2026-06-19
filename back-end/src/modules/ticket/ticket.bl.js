@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const errorFactory = require("sillajError");
 const { operationMessages } = require("../../base/enums");
 
@@ -7,131 +8,91 @@ class TicketBl {
     this.departmentRepo = departmentRepo;
   }
 
-  async createTicket({ department, title }, userId) {
-    const ticketExist = await this.ticketRepo.exists({
-      department,
-      title,
-      userId,
+  async createTicket(ticketData, userId) {
+    const duplicate = await this.ticketRepo.findOne({
+      userId: userId,
     });
-
-    if (ticketExist) {
+    if (duplicate) {
       throw errorFactory.Conflict(
         operationMessages["ticket.create.conflict"].fa,
       );
     }
 
-    const departmentExist = await this.departmentRepo.exists({
-      _id: department,
-    });
-    if (!departmentExist) {
-      throw errorFactory.NotFound(operationMessages["department.notFound"].fa);
+    const department = await this.departmentRepo.findById(ticketData.department);
+    if(!department){
+      throw errorFactory.Conflict(
+        operationMessages["department.not.found"].fa,
+      ); 
     }
-    return await this.ticketRepo.create({ ...req.body, userId });
+    const newTicket = await this.ticketRepo.create(ticketData, userId);
+    return newTicket;
   }
 
-  getTickets(req) {
-    const { departmentId, tags, priority, status } = req.query;
-
-    const query = {};
-    if (departmentId) {
-      query.departmentId = departmentId;
-    }
-    if (tags && tags.length > 0) {
-      query.tags = { $all: tags };
-    }
-    if (priority) {
-      query.priority = priority;
-    }
-    if (status) {
-      query.status = status;
-    }
-    return this.ticketRepo.find(query);
+  async getTickets(data) {
+    return this.ticketRepo.findByFilter(data);
   }
 
-  async getTicket(id) {
-    const existCache = await this.ticketRepo.getCache(id);
-    if (existCache) {
-      return existCache;
-    }
-
-    const ticket = await this.ticketRepo.findById(id);
+  async getTicket(ticketId) {
+    const ticket = await this.ticketRepo.findById(ticketId);
     if (!ticket) {
-      throw errorFactory.NotFound(operationMessages["ticket.notFound"]);
+      throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa);
     }
-    await this.ticketRepo.setCache(id, ticket);
-
     return ticket;
   }
 
-  async updateTicket(req) {
-    const { id } = req.params;
-    const { title, description, priority, tags } = req.body;
-    const user_id = req.user._id;
-
-    const ticket = await this.ticketRepo.findById(id);
+  async updateTicket(ticketId, data, userId) {
+    const { title, description, priority, status, department, tags } = data;
+    const ticket = await this.ticketRepo.findById(ticketId);
     if (!ticket) {
       throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa);
     }
-    if (ticket.user_id.toString() !== user_id.toString()) {
-      throw errorFactory.Forbidden(operationMessages["accessDenied"].fa);
-    }
-    if (ticket.status === "Closed") {
+    if (ticket.status === "closed") {
       throw errorFactory.BadRequest(
-        "امکان ویرایش تیکت‌های بسته شده وجود ندارد.",
+        operationMessages["ticket.update.closed.error"].fa,
       );
     }
 
-    const conflict = await this.ticketRepo.findOne({ title, user_id });
-    if (conflict) {
-      throw errorFactory.Conflict(
-        operationMessages["ticket.create.conflict"].fa,
-      );
-    }
+    const updateData = {};
+    if (title) updateData.title = title;
+    if (description) updateData.description = description;
+    if (priority) updateData.priority = parseInt(priority);
+    if (status) updateData.status = status;
+    if (department) updateData.department = department;
+    if (Array.isArray(tags))
+      updateData.tags = tags.map((t) => mongoose.Types.ObjectId(t));
 
-    const updateData = {
-      ...(title && { title }),
-      ...(description && { description }),
-      ...(priority && { priority }),
-      ...(tags && { tags }),
-    };
-
-    const updatedTicket = await this.ticketRepo.updateTicketById(
-      id,
+    const updatedTicket = await this.ticketRepo.updateByTicketId(
+      ticketId,
       updateData,
     );
-    await this.ticketRepo.deleteCache(id);
     return updatedTicket;
   }
 
-  async changeTicketStatus(req) {
-    const { id } = req.params;
-    const { status } = req.body;
+  async changeTicketStatus(ticketId, status) {
     const validStatuses = [
-      "Open",
-      "Pending",
-      "In Progress",
-      "Resolved",
-      "Closed",
+      "open",
+      "pending",
+      "in_progress",
+      "resolved",
+      "closed",
     ];
     if (!validStatuses.includes(status)) {
-      throw errorFactory.BadRequest("وضعیت ارسالی نامعتبر است.");
+      throw errorFactory.BadRequest(
+        operationMessages["ticket.invalid.status"].fa,
+      );
     }
-    const ticket = await this.ticketRepo.findById(id);
-    if (!ticket) {
-      throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa);
-    }
-
-    const updatedTicket = await this.ticketRepo.updateById(id, { status });
+    const updatedTicket = await this.ticketRepo.updateByTicketId(ticketId, {
+      status,
+    });
     return updatedTicket;
   }
 
-  async deleteTicket(id) {
-    const ticket = await this.ticketRepo.exists({ _id: id });
+  async deleteTicket(ticketId) {
+    const ticket = await this.ticketRepo.findById(ticketId);
     if (!ticket) {
       throw errorFactory.NotFound(operationMessages["ticket.notFound"].fa);
     }
-    await this.ticketRepo.deleteById(id);
-    await this.ticketRepo.deleteCache(id);
+    await this.ticketRepo.deleteByTicketId(id);
   }
 }
 

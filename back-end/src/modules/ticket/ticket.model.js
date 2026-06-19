@@ -1,43 +1,52 @@
 const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 
-const schema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ["Open", "Pending", "In Progress", "Resolved", "Closed"],
-    default:"Open"
-  },
-  priority: {
-    type: Number,
-    required: true,
-    enum: [1, 2, 3, 4, 5],
-    default: 5,
-  },
-  department: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-  },
-  User: {
-    type: mongoose.Types.ObjectId,
-    ref:"users",
-    required: true,
-  },
-  tags: {
-    type: [String],
-  },
-},
+const ticketSchema = new Schema(
   {
-    timestamps: true
-  })
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    status: {
+      type: String,
+      enum: ["Open", "Pending", "In Progress", "Resolved", "Closed"],
+      default: "Open",
+    },
+    priority: {
+      type: Number,
+      required: true,
+      enum: [1, 2, 3, 4, 5],
+      default: 5,
+    },
+    department: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      index: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TicketTag",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
 
-const model=mongoose.model("tickets",schema);
-
-module.exports=model
+const Ticket = model("Ticket", ticketSchema);
+module.exports = Ticket;

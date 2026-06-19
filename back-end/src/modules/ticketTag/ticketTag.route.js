@@ -1,46 +1,52 @@
 const ticketTagRoutes = {
   configs: {
-    prefix: "/api/v1/ticketTags",
+    prefix: "/api/v1/ticket-tags",
     controller: "ticketTagController",
   },
   routes: [
     {
       url: "/",
-      methodName: "createTicketTag",
-      middlewares: [{ name: "authMiddleware" }, { name: "validate", args: ["ticketTagSchema", "body"] }],
+      methodName: "createTag",
+      middlewares: [
+        { name: "authMiddleware" },
+        { name: "validate", args: ["createTicketTagSchema", "body"] },
+      ],
       httpMethod: "post",
     },
     {
       url: "/",
-      methodName: "getAllTicketTags",
-      middlewares: [{ name: "authMiddleware" }],
-      httpMethod: "get",
-    },
-    {
-      url: "/:id",
-      methodName: "getTicketTag",
+      methodName: "getTags",
       middlewares: [
         { name: "authMiddleware" },
-        { name: "validate", args: ["getTicketTagSchema", "params"] }
+        { name: "validate", args: ["searchTicketTagSchema", "query"] },
       ],
       httpMethod: "get",
     },
     {
       url: "/:id",
-      methodName: "deleteTicketTag",
+      methodName: "getTag",
       middlewares: [
         { name: "authMiddleware" },
-        { name: "validate", args: ["getTicketTagSchema", "params"] }
+        { name: "validate", args: ["getTicketTagSchema", "params"] },
+      ],
+      httpMethod: "get",
+    },
+    {
+      url: "/:id",
+      methodName: "deleteTag",
+      middlewares: [
+        { name: "authMiddleware" },
+        { name: "validate", args: ["getTicketTagSchema", "params"] },
       ],
       httpMethod: "delete",
     },
     {
       url: "/:id",
-      methodName: "updateTicketTag",
+      methodName: "updateTag",
       middlewares: [
         { name: "authMiddleware" },
         { name: "validate", args: ["getTicketTagSchema", "params"] },
-        { name: "validate", args: ["updateTicketTagSchema", "body"] }
+        { name: "validate", args: ["updateTicketTagSchema", "body"] },
       ],
       httpMethod: "put",
     },

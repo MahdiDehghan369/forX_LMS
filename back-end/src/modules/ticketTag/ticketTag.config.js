@@ -1,40 +1,50 @@
-const ticketTagModel = require("./ticketTag.model");
-const ticketTagRepo = require("./ticketTag.repository");
-const ticketTagController = require("./ticketTag.controller");
-const ticketTagService = require("./ticketTag.bl");
-const { ticketTagSchema,getTicketTagSchema,updateTicketTagSchema } = require("./ticketTag.schema");
+const TicketTagRepository = require("./ticketTag.repo");
+const TicketTagBl = require("./ticketTag.bl");
+const TicketTagController = require("./ticketTag.ctrl");
+const TicketTagModel = require("./ticketTag.model");
+const {
+  createTicketTagSchema,
+  updateTicketTagSchema,
+  getTicketTagSchema,
+  searchTicketTagSchema,
+} = require("./ticketTag.schema");
 
 module.exports = [
   {
     key: "ticketTagModel",
-    Class: ticketTagModel,
+    Class: TicketTagModel,
     type: "model",
     options: { singleton: true },
   },
   {
     key: "ticketTagRepo",
-    Class: ticketTagRepo,
+    Class: TicketTagRepository,
     dependencies: ["ticketTagModel"],
     type: "repository",
     options: { singleton: true },
   },
   {
-    key: "ticketTagService",
-    Class: ticketTagService,
-    dependencies: ["ticketTagRepo"],
+    key: "ticketTagBl",
+    Class: TicketTagBl,
+    dependencies: ["ticketTagRepo", "userRepo"],
     type: "service",
     options: { singleton: true },
   },
   {
     key: "ticketTagController",
-    Class: ticketTagController,
-    dependencies: ["ticketTagService"],
+    Class: TicketTagController,
+    dependencies: ["ticketTagBl"],
     type: "controller",
     options: { singleton: true },
   },
   {
-    key: "ticketTagSchema",
-    schema: ticketTagSchema,
+    key: "createTicketTagSchema",
+    schema: createTicketTagSchema,
+    type: "schema",
+  },
+  {
+    key: "updateTicketTagSchema",
+    schema: updateTicketTagSchema,
     type: "schema",
   },
   {
@@ -43,8 +53,8 @@ module.exports = [
     type: "schema",
   },
   {
-    key: "updateTicketTagSchema",
-    schema: updateTicketTagSchema,
+    key: "searchTicketTagSchema",
+    schema: searchTicketTagSchema,
     type: "schema",
   },
 ];

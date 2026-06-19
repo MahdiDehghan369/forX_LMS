@@ -396,6 +396,282 @@ const operationMessages = {
     fa: "یادداشت مورد نظر پیدا نشد.",
     en: "Note not found.",
   },
+  "ticket.create.success": {
+    fa: "تیکت با موفقیت ایجاد شد.",
+    en: "Ticket created successfully.",
+  },
+  "ticket.get.success": {
+    fa: "اطلاعات تیکت با موفقیت دریافت شد.",
+    en: "Ticket information retrieved successfully.",
+  },
+  "ticket.status.update.success": {
+    fa: "وضعیت تیکت با موفقیت به‌روزرسانی شد.",
+    en: "Ticket status updated successfully.",
+  },
+  "ticket.update.success": {
+    fa: "تیکت با موفقیت به‌روزرسانی شد.",
+    en: "Ticket updated successfully.",
+  },
+  "ticket.delete.success": {
+    fa: "تیکت با موفقیت حذف شد.",
+    en: "Ticket deleted successfully.",
+  },
+  "ticket.create.conflict": {
+    fa: "تیکت تکراری قبلاً ثبت شده است.",
+    en: "Duplicate ticket already exists.",
+  },
+  "ticket.notFound": {
+    fa: "تیکت مورد نظر پیدا نشد.",
+    en: "Ticket not found.",
+  },
+  "ticket.update.closed.error": {
+    fa: "امکان به‌روزرسانی تیکت بسته شده وجود ندارد.",
+    en: "Cannot update a closed ticket.",
+  },
+  "ticket.invalid.status": {
+    fa: "وضعیت وارد شده نامعتبر است.",
+    en: "Invalid status provided.",
+  },
+  "ticket.invalid.priority": {
+    fa: "اولویت وارد شده نامعتبر است. اولویت باید بین ۱ تا ۵ باشد.",
+    en: "Invalid priority provided. Priority must be between 1 and 5.",
+  },
+  "ticket.invalid.department": {
+    fa: "شناسه دپارتمان وارد شده نامعتبر است.",
+    en: "Invalid department ID provided.",
+  },
+  "ticket.invalid.tags": {
+    fa: "شناسه برچسب وارد شده نامعتبر است.",
+    en: "Invalid tag ID provided.",
+  },
+  "ticket.invalid.id": {
+    fa: "شناسه تیکت وارد شده نامعتبر است.",
+    en: "Invalid ticket ID provided.",
+  },
+  "ticket.access.denied": {
+    fa: "شما دسترسی لازم برای این عملیات را ندارید.",
+    en: "You do not have permission to perform this operation.",
+  },
+  "ticket.empty.list": {
+    fa: "هیچ تیکتی یافت نشد.",
+    en: "No tickets found.",
+  },
+  "ticket.get.all.success": {
+    fa: "لیست تیکت‌ها با موفقیت دریافت شد.",
+    en: "Tickets list retrieved successfully.",
+  },
+  "ticket.assignment.success": {
+    fa: "تیکت با موفقیت به کاربر اختصاص یافت.",
+    en: "Ticket assigned successfully.",
+  },
+  "ticket.comment.added": {
+    fa: "نظر با موفقیت به تیکت اضافه شد.",
+    en: "Comment added to ticket successfully.",
+  },
+  "ticket.attachment.uploaded": {
+    fa: "فایل پیوست با موفقیت آپلود شد.",
+    en: "Attachment uploaded successfully.",
+  },
+  "tag.create.success": {
+    fa: "برچسب با موفقیت ایجاد شد.",
+    en: "Tag created successfully.",
+  },
+  "tag.get.success": {
+    fa: "اطلاعات برچسب با موفقیت دریافت شد.",
+    en: "Tag information retrieved successfully.",
+  },
+  "tag.update.success": {
+    fa: "برچسب با موفقیت به‌روزرسانی شد.",
+    en: "Tag updated successfully.",
+  },
+  "tag.delete.success": {
+    fa: "برچسب با موفقیت حذف شد.",
+    en: "Tag deleted successfully.",
+  },
+  "tag.name.duplicate.error": {
+    fa: "این نام برچسب قبلاً ثبت شده است.",
+    en: "This tag name already exists.",
+  },
+  "tag.notFound": {
+    fa: "برچسب مورد نظر پیدا نشد.",
+    en: "Tag not found.",
+  },
+  "tag.get.all.success": {
+    fa: "لیست برچسب‌ها با موفقیت دریافت شد.",
+    en: "Tags list retrieved successfully.",
+  },
+  "tag.invalid.id": {
+    fa: "شناسه برچسب وارد شده نامعتبر است.",
+    en: "Invalid tag ID provided.",
+  },
+  "tag.inactive.error": {
+    fa: "برچسب غیرفعال است و قابل استفاده نمی‌باشد.",
+    en: "Tag is inactive and cannot be used.",
+  },
+  "tag.used.in.tickets": {
+    fa: "این برچسب در تیکت‌ها استفاده شده است و قابل حذف نمی‌باشد.",
+    en: "This tag is used in tickets and cannot be deleted.",
+  },
+  "tag.color.invalid": {
+    fa: "رنگ برچسب نامعتبر است. باید یک کد هگز معتبر باشد.",
+    en: "Invalid tag color. Must be a valid hex code.",
+  },
+  "tag.name.required": {
+    fa: "نام برچسب الزامی است.",
+    en: "Tag name is required.",
+  },
+  "tag.name.tooLong": {
+    fa: "نام برچسب نباید بیشتر از ۵۰ کاراکتر باشد.",
+    en: "Tag name must not exceed 50 characters.",
+  },
+  "tag.description.tooLong": {
+    fa: "توضیحات برچسب نباید بیشتر از ۵۰۰ کاراکتر باشد.",
+    en: "Tag description must not exceed 500 characters.",
+  },
+  "department.not.found": {
+    fa: "دپارتمان مورد نظر پیدا نشد.",
+    en: "Department not found.",
+  },
+  "department.create.success": {
+    fa: "دپارتمان با موفقیت ایجاد شد.",
+    en: "Department created successfully.",
+  },
+  "department.get.success": {
+    fa: "اطلاعات دپارتمان با موفقیت دریافت شد.",
+    en: "Department information retrieved successfully.",
+  },
+  "department.update.success": {
+    fa: "دپارتمان با موفقیت به‌روزرسانی شد.",
+    en: "Department updated successfully.",
+  },
+  "department.delete.success": {
+    fa: "دپارتمان با موفقیت حذف شد.",
+    en: "Department deleted successfully.",
+  },
+  "department.duplicate.error": {
+    fa: "این دپارتمان قبلاً ثبت شده است.",
+    en: "This department already exists.",
+  },
+  "department.invalid.id": {
+    fa: "شناسه دپارتمان وارد شده نامعتبر است.",
+    en: "Invalid department ID provided.",
+  },
+  "department.get.all.success": {
+    fa: "لیست دپارتمان‌ها با موفقیت دریافت شد.",
+    en: "Departments list retrieved successfully.",
+  },
+  "department.inactive.error": {
+    fa: "دپارتمان غیرفعال است و قابل استفاده نمی‌باشد.",
+    en: "Department is inactive and cannot be used.",
+  },
+  "department.has.tickets": {
+    fa: "این دپارتمان دارای تیکت است و قابل حذف نمی‌باشد.",
+    en: "This department has tickets and cannot be deleted.",
+  },
+  "department.has.users": {
+    fa: "این دپارتمان دارای کاربر است و قابل حذف نمی‌باشد.",
+    en: "This department has users and cannot be deleted.",
+  },
+  "department.required": {
+    fa: "دپارتمان الزامی است.",
+    en: "Department is required.",
+  },
+  "department.name.required": {
+    fa: "نام دپارتمان الزامی است.",
+    en: "Department name is required.",
+  },
+  "department.name.tooLong": {
+    fa: "نام دپارتمان نباید بیشتر از ۱۰۰ کاراکتر باشد.",
+    en: "Department name must not exceed 100 characters.",
+  },
+  "department.code.duplicate.error": {
+    fa: "این کد دپارتمان قبلاً ثبت شده است.",
+    en: "This department code already exists.",
+  },
+  "answerTicket.create.success": {
+    fa: "پاسخ با موفقیت ثبت شد.",
+    en: "Answer created successfully.",
+  },
+  "answerTicket.getAll.success": {
+    fa: "لیست تمام پاسخ‌ها با موفقیت دریافت شد.",
+    en: "All answers list retrieved successfully.",
+  },
+  "answerTicket.get.success": {
+    fa: "اطلاعات پاسخ با موفقیت دریافت شد.",
+    en: "Answer information retrieved successfully.",
+  },
+  "answerTicket.getByTicket.success": {
+    fa: "لیست پاسخ‌های تیکت با موفقیت دریافت شد.",
+    en: "Ticket answers list retrieved successfully.",
+  },
+  "answerTicket.update.success": {
+    fa: "پاسخ با موفقیت به‌روزرسانی شد.",
+    en: "Answer updated successfully.",
+  },
+  "answerTicket.delete.success": {
+    fa: "پاسخ با موفقیت حذف شد.",
+    en: "Answer deleted successfully.",
+  },
+  "answerTicket.notFound": {
+    fa: "پاسخ مورد نظر پیدا نشد.",
+    en: "Answer not found.",
+  },
+  "answerTicket.create.error": {
+    fa: "خطا در ثبت پاسخ. لطفاً مجدداً تلاش کنید.",
+    en: "Error creating answer. Please try again.",
+  },
+  "answerTicket.update.error": {
+    fa: "خطا در به‌روزرسانی پاسخ. لطفاً مجدداً تلاش کنید.",
+    en: "Error updating answer. Please try again.",
+  },
+  "answerTicket.delete.error": {
+    fa: "خطا در حذف پاسخ. لطفاً مجدداً تلاش کنید.",
+    en: "Error deleting answer. Please try again.",
+  },
+  "answerTicket.invalid.id": {
+    fa: "شناسه پاسخ وارد شده نامعتبر است.",
+    en: "Invalid answer ID provided.",
+  },
+  "answerTicket.empty.content": {
+    fa: "متن پاسخ نمی‌تواند خالی باشد.",
+    en: "Answer content cannot be empty.",
+  },
+  "answerTicket.content.tooLong": {
+    fa: "متن پاسخ نباید بیشتر از ۵۰۰۰ کاراکتر باشد.",
+    en: "Answer content must not exceed 5000 characters.",
+  },
+  "answerTicket.ticket.closed": {
+    fa: "امکان ثبت پاسخ برای تیکت بسته شده وجود ندارد.",
+    en: "Cannot add answer to a closed ticket.",
+  },
+  "answerTicket.ticket.resolved": {
+    fa: "امکان ثبت پاسخ برای تیکت حل شده وجود ندارد.",
+    en: "Cannot add answer to a resolved ticket.",
+  },
+  "answerTicket.duplicate.solution": {
+    fa: "این تیکت قبلاً دارای پاسخ حل‌کننده است.",
+    en: "This ticket already has a solution answer.",
+  },
+  "answerTicket.attachment.invalid": {
+    fa: "فرمت فایل پیوست شده مجاز نمی‌باشد.",
+    en: "Invalid attachment format.",
+  },
+  "answerTicket.attachment.tooLarge": {
+    fa: "حجم فایل پیوست شده بیش از حد مجاز است.",
+    en: "Attachment file size exceeds the limit.",
+  },
+  "answerTicket.access.denied": {
+    fa: "شما دسترسی لازم برای این عملیات را ندارید.",
+    en: "You do not have permission to perform this operation.",
+  },
+  "answerTicket.ticket.notFound": {
+    fa: "تیکت مورد نظر برای ثبت پاسخ پیدا نشد.",
+    en: "Ticket not found for adding answer.",
+  },
+  "answerTicket.unauthorized": {
+    fa: "شما مجاز به مشاهده این پاسخ نیستید.",
+    en: "You are not authorized to view this answer.",
+  },
 };
 
 const codes = Object.freeze({

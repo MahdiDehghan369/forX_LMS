@@ -1,34 +1,39 @@
-const answerTicketModel = require("./answerTicket.model");
-const answerTicketRepo = require("./answerTicket.repository");
-const answerTicketController = require("./answerTicket.controller");
-const answerTicketService = require("./answerTicket.bl");
-const { answerTicketSchema,getAnswerTicketSchema,getAnswersTicketSchema,updateAnswerTicketSchema } = require("./answerTicket.schema");
+const AnswerTicketModel = require('./answerTicket.model');
+const AnswerTicketRepo = require('./answerTicket.repo');
+const AnswerTicketController = require('./answerTicket.ctrl');
+const AnswerTicketBl = require('./answerTicket.bl');
+const {
+  answerTicketSchema,
+  getAnswerTicketSchema,
+  getAnswersTicketSchema,
+  updateAnswerTicketSchema,
+} = require('./answerTicket.schema');
 
 module.exports = [
   {
     key: "answerTicketModel",
-    Class: answerTicketModel,
+    Class: AnswerTicketModel,
     type: "model",
     options: { singleton: true },
   },
   {
     key: "answerTicketRepo",
-    Class: answerTicketRepo,
+    Class: AnswerTicketRepo,
     dependencies: ["answerTicketModel"],
     type: "repository",
     options: { singleton: true },
   },
   {
-    key: "answerTicketService",
-    Class: answerTicketService,
-    dependencies: ["answerTicketRepo","ticketRepo"],
+    key: "answerTicketBl",
+    Class: AnswerTicketBl,
+    dependencies: ["answerTicketRepo", "ticketRepo"],
     type: "service",
     options: { singleton: true },
   },
   {
     key: "answerTicketController",
-    Class: answerTicketController,
-    dependencies: ["answerTicketService", "answerTicketRepo"],
+    Class: AnswerTicketController,
+    dependencies: ["answerTicketBl"],
     type: "controller",
     options: { singleton: true },
   },

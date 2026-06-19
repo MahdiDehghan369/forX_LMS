@@ -1,70 +1,91 @@
-const errorFactory = require("sillajError")
-const { operationMessages } = require("../../base/enums")
-class ticketTagService {
-  constructor(ticketTagRepo) {
+const errorFactory = require("sillajError");
+const { operationMessages } = require("../../base/enums");
+
+class TicketTagBl {
+  constructor(ticketTagRepo, userRepo) {
     this.ticketTagRepo = ticketTagRepo;
+    this.userRepo = userRepo;
   }
 
-  async createTicketTag(body) {
-    const { name, color } = body;
-    const existTicketTag = await this.ticketTagRepo.findOne({ name });
-    if (existTicketTag) {
-      throw errorFactory.Conflict(operationMessages["ticketTag.create.conflict"].fa);
-    }
-    const ticketTag = await this.ticketTagRepo.create({ name, color });
+  async createTag(data, createdBy) {
+    const normalizedData = {
+      createdBy,
+      ...data,
+      name: data.name.trim(),
+      color: data.color || "#default",
+    };
 
-    return ticketTag;
+    const duplicateCheck = await this.ticketTagRepo.findOne({
+      name: normalizedData.name,
+      isActive: true,
+    });
+
+    if (duplicateCheck) {
+      throw errorFactory.Conflict(
+        operationMessages["tag.name.duplicate.error"].fa,
+      );
+    }
+
+    const tag = await this.ticketTagRepo.create(normalizedData);
+    return tag;
   }
 
-  async getAllTicketTags() {
-    const ticketTags = await this.ticketTagRepo.find();
-    return ticketTags;
+  async getTags(query = {}) {
+    return this.ticketTagRepo.findByFilter(query);
   }
 
-  async getTicketTag(id) {
-    const existCache = await this.ticketTagRepo.getCache(id);
-    if (existCache) {
-      return existCache;
+  async getTag(tagId) {
+    const tag = await this.ticketTagRepo.findById(tagId);
+    if (!tag) {
+      throw errorFactory.NotFound(operationMessages["tag.notFound"].fa);
     }
-
-    const ticketTag = await this.ticketTagRepo.findById(id);
-    if (!ticketTag) {
-      throw errorFactory.NotFound(operationMessages["ticketTag.notFound"].fa);
-    }
-
-    await this.ticketTagRepo.setCache(id, ticketTag);
-    return ticketTag;
+    return tag;
   }
 
-  async updateTicketTag(req) {
-    const { id } = req.params;
-    const { name, color } = req.body;
-
-    const ticketTag = await this.ticketTagRepo.findById(id);
-    if (!ticketTag) {
-      throw errorFactory.NotFound(operationMessages["ticketTag.notFound"].fa);
+  async updateTag(tagId, updateData) {
+    const tag = await this.ticketTagRepo.findById(tagId);
+    if (!tag) {
+      throw errorFactory.NotFound(operationMessages["tag.notFound"].fa);
     }
 
-    const conflict = await this.ticketTagRepo.findOne({ name });
-    if (conflict) {
-      throw errorFactory.Conflict(operationMessages["ticketTag.create.conflict"].fa)
+    if (updateData.name && updateData.name !== tag.name) {
+      const normalizedName = updateData.name.trim();
+      const duplicateTag = await this.ticketTagRepo.findOne({
+        name: normalizedName,
+        isActive: true,
+        _id: { $ne: id },
+      });
+
+      if (duplicateTag) {
+        throw errorFactory.Conflict(
+          operationMessages["tag.name.duplicate.error"].fa,
+        );
+      }
     }
 
-    const updatedTicketTag = await this.ticketTagRepo.updateTicketTagById(id, { name, color });
-    await this.ticketTagRepo.deleteCache(id);
-    return updatedTicketTag;
+    const normalizedUpdate = {};
+    if (updateData.name) normalizedUpdate.name = updateData.name.trim();
+    if (updateData.description !== undefined)
+      normalizedUpdate.description = updateData.description;
+    if (updateData.color !== undefined)
+      normalizedUpdate.color = updateData.color;
+    if (updateData.isActive !== undefined)
+      normalizedUpdate.isActive = updateData.isActive;
+
+    const updatedTag = await this.ticketTagRepo.updateByTagId(
+      tagId,
+      normalizedUpdate,
+    );
+    return updatedTag;
   }
 
-  async deleteTicketTag(id) {
-    const ticketTag = await this.ticketTagRepo.exists({ _id: id });
-    if (!ticketTag) {
-      throw errorFactory.NotFound(operationMessages["ticketTag.notFound"].fa);
+  async deleteTag(tagId) {
+    const tag = await this.ticketTagRepo.findById(tagId);
+    if (!tag) {
+      throw errorFactory.NotFound(operationMessages["tag.notFound"].fa);
     }
-
-    await this.ticketTagRepo.deleteById(id);
-    await this.ticketTagRepo.deleteCache(id);
+    await this.ticketTagRepo.updateByTagId(tagId, { isActive: false });
   }
-
 }
 
-module.exports = ticketTagService;
+module.exports = TicketTagBl;

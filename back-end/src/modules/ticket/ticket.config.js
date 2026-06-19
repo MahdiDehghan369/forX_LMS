@@ -1,7 +1,7 @@
-const ticketRepository = require("./ticket.repository");
-const ticketService = require("./ticket.bl");
-const ticketController = require("./ticket.controller");
-const ticketModel = require("./ticket.model");
+const TicketRepository = require("./ticket.repo");
+const TicketBl = require("./ticket.bl");
+const TicketController = require("./ticket.ctrl");
+const TicketModel = require("./ticket.model");
 const {
   createTicketSchema,
   getTicketSchema,
@@ -13,28 +13,28 @@ const {
 module.exports = [
   {
     key: "ticketModel",
-    Class: ticketModel,
+    Class: TicketModel,
     type: "model",
     options: { singleton: true },
   },
   {
     key: "ticketRepo",
-    Class: ticketRepository,
+    Class: TicketRepository,
     dependencies: ["ticketModel"],
     type: "repository",
     options: { singleton: true },
   },
   {
-    key: "ticketService",
-    Class: ticketService,
+    key: "ticketBl",
+    Class: TicketBl,
     dependencies: ["ticketRepo", "departmentRepo"],
     type: "service",
     options: { singleton: true },
   },
   {
     key: "ticketController",
-    Class: ticketController,
-    dependencies: ["ticketService", "ticketRepo"],
+    Class: TicketController,
+    dependencies: ["ticketBl"],
     type: "controller",
     options: { singleton: true },
   },

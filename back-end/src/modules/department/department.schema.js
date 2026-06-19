@@ -10,7 +10,7 @@ const departmentsSchema = yup.object({
 
   href: yup
     .string()
-    .required('آدرس لینک (href) الزامی است')
+    .required('آدرس لینک الزامی است')
     .trim('عنوان نباید شامل فاصله خالی در ابتدا و انتها باشد')
 });
 const updateDepartmentSchema = yup.object({
@@ -30,7 +30,7 @@ const updateDepartmentSchema = yup.object({
 const getDepartmentSchema = yup.object({
   id: yup
     .string()
-    .required('id دپارتمان الزامی است.')
+    .required('آیدی دپارتمان الزامی است.')
     .matches(/^[0-9a-fA-F]{24}$/, "id must be a valid ObjectId"),
 })
 

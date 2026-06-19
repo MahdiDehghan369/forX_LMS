@@ -1,34 +1,38 @@
-const departmentModel = require("./department.model");
-const departmentRepo = require("./department.repository");
-const departmentController = require("./department.controller");
-const departmentService = require("./department.bl");
-const { departmentsSchema,getDepartmentSchema,updateDepartmentSchema } = require("./department.schema");
+const DepartmentModel = require("./department.model");
+const DepartmentRepo = require("./department.repo");
+const DepartmentController = require("./department.ctrl");
+const DepartmentBl = require("./department.bl");
+const {
+  departmentsSchema,
+  getDepartmentSchema,
+  updateDepartmentSchema,
+} = require("./department.schema");
 
 module.exports = [
   {
     key: "departmentModel",
-    Class: departmentModel,
+    Class: DepartmentModel,
     type: "model",
     options: { singleton: true },
   },
   {
     key: "departmentRepo",
-    Class: departmentRepo,
+    Class: DepartmentRepo,
     dependencies: ["departmentModel"],
     type: "repository",
     options: { singleton: true },
   },
   {
-    key: "departmentService",
-    Class: departmentService,
+    key: "departmentBl",
+    Class: DepartmentBl,
     dependencies: ["departmentRepo"],
     type: "service",
     options: { singleton: true },
   },
   {
     key: "departmentController",
-    Class: departmentController,
-    dependencies: ["departmentService", "departmentRepo"],
+    Class: DepartmentController,
+    dependencies: ["departmentBl", "departmentRepo"],
     type: "controller",
     options: { singleton: true },
   },
